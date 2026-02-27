@@ -52,3 +52,10 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+*.bin
+DocumentLayout.backup.json
+DocumentLayout.json
+*.vsidx
+*.v2
+*.suo
