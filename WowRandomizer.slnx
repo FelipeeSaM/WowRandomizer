@@ -1,3 +1,9 @@
 <Solution>
+  <Folder Name="/ApiGateways/">
+    <Project Path="ApiGateways/YarpApiGateway/YarpApiGateway.csproj" Id="eb091468-0a7d-4594-b901-9921b3de22c5" />
+  </Folder>
+  <Folder Name="/Blocks/">
+    <Project Path="../Blocks/BuildingBlocks/BuildingBlocks.csproj" Id="bb7846b7-91c3-4970-8807-0cc3fa199bf0" />
+  </Folder>
   <Project Path="WowRandomizer.csproj" />
 </Solution>
