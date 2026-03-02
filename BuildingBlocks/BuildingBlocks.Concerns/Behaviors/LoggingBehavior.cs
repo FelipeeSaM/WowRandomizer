@@ -25,11 +25,11 @@ namespace BuildingBlocks.Concerns.Behaviors
 
             if(timeElapsed.Seconds > 3)
             {
-                logger.LogInformation("[PERFORMANCE] a request {Request} durou {Duracao}",
+                logger.LogInformation("[PERFORMANCE] the request {Request} has duration of {Duracao} ms",
                     typeof(TRequest).Name, timeElapsed.Milliseconds);
             }
 
-            logger.LogInformation("[Final] handler {Request} com a response {Response}", typeof(TRequest).Name, typeof(TResponse).Name);
+            logger.LogInformation("[Final] handler {Request} with response {Response}", typeof(TRequest).Name, typeof(TResponse).Name);
             return response;
         }
     }
