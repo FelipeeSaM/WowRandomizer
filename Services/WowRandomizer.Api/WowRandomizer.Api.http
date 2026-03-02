@@ -1,5 +1,0 @@
-﻿@WowRandomizer.Api_HostAddress = https://localhost:7261
-
-GET {{WowRandomizer.Api_HostAddress}}/
-
-###

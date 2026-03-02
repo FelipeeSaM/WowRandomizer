@@ -1,3 +1,5 @@
+using BuildingBlocks.Messaging.MassTransit;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCarter(new DependencyContextAssemblyCatalog([typeof(Program).Assembly]));
@@ -10,10 +12,10 @@ builder.Services.AddMediatR(config => {
 
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
+builder.Services.AddMessageBroker(builder.Configuration);
+
 var app = builder.Build();
 
 app.MapCarter();
-
-app.MapGet("/", () => "Hello World!");
 
 app.Run();

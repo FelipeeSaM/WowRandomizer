@@ -4,6 +4,7 @@
   </Folder>
   <Folder Name="/BuildingBlocks/">
     <Project Path="BuildingBlocks/BuildingBlocks.Concerns/BuildingBlocks.Concerns.csproj" Id="4bd1a164-2ef3-47cc-a2a0-da00b0478769" />
+    <Project Path="BuildingBlocks/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj" Id="0760c5f3-eec8-4f3f-a888-f1c051130056" />
   </Folder>
   <Folder Name="/Services/">
     <Project Path="Services/WowRandomizer.Api/WowRandomizer.Api.csproj" Id="db7072c5-8023-4d19-9dcb-dd9599489203" />
