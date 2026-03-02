@@ -1,3 +1,15 @@
 <Solution>
-  <Project Path="WowRandomizer.csproj" />
+  <Folder Name="/ApiGateways/">
+    <Project Path="ApiGateways/YarpApiGateway/YarpApiGateway.csproj" Id="eb091468-0a7d-4594-b901-9921b3de22c5" />
+  </Folder>
+  <Folder Name="/BuildingBlocks/">
+    <Project Path="BuildingBlocks/BuildingBlocks.Concerns/BuildingBlocks.Concerns.csproj" Id="4bd1a164-2ef3-47cc-a2a0-da00b0478769" />
+    <Project Path="BuildingBlocks/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj" Id="0760c5f3-eec8-4f3f-a888-f1c051130056" />
+  </Folder>
+  <Folder Name="/Services/">
+    <Project Path="Services/WowRandomizer.Api/WowRandomizer.Api.csproj" Id="db7072c5-8023-4d19-9dcb-dd9599489203" />
+  </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
 </Solution>

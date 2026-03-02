@@ -1,0 +1,6 @@
+services:
+  wowrandomizer.api:
+    image: ${DOCKER_REGISTRY-}wowrandomizerapi
+    build:
+      context: .
+      dockerfile: Services/WowRandomizer.Api/Dockerfile
