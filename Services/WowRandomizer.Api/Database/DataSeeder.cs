@@ -11,72 +11,72 @@ public static class DataSeeder
 
         var factions = new Dictionary<string, Faction>
         {
-            ["Alliance"] = new() { Id = 1, Name = "Alliance" },
-            ["Horde"]    = new() { Id = 2, Name = "Horde" }
+            ["Alliance"] = new() { Name = "Alliance" },
+            ["Horde"]    = new() { Name = "Horde" }
         };
 
         var classes = new Dictionary<string, GameClass>
         {
-            ["Warrior"]       = new() { Id = 1,  Name = "Warrior" },
-            ["Paladin"]       = new() { Id = 2,  Name = "Paladin" },
-            ["Hunter"]        = new() { Id = 3,  Name = "Hunter" },
-            ["Rogue"]         = new() { Id = 4,  Name = "Rogue" },
-            ["Priest"]        = new() { Id = 5,  Name = "Priest" },
-            ["Death Knight"]  = new() { Id = 6,  Name = "Death Knight" },
-            ["Shaman"]        = new() { Id = 7,  Name = "Shaman" },
-            ["Mage"]          = new() { Id = 8,  Name = "Mage" },
-            ["Warlock"]       = new() { Id = 9,  Name = "Warlock" },
-            ["Monk"]          = new() { Id = 10, Name = "Monk" },
-            ["Druid"]         = new() { Id = 11, Name = "Druid" },
-            ["Demon Hunter"]  = new() { Id = 12, Name = "Demon Hunter" },
-            ["Evoker"]        = new() { Id = 13, Name = "Evoker" }
+            ["Warrior"]       = new() { Name = "Warrior" },
+            ["Paladin"]       = new() { Name = "Paladin" },
+            ["Hunter"]        = new() { Name = "Hunter" },
+            ["Rogue"]         = new() { Name = "Rogue" },
+            ["Priest"]        = new() { Name = "Priest" },
+            ["Death Knight"]  = new() { Name = "Death Knight" },
+            ["Shaman"]        = new() { Name = "Shaman" },
+            ["Mage"]          = new() { Name = "Mage" },
+            ["Warlock"]       = new() { Name = "Warlock" },
+            ["Monk"]          = new() { Name = "Monk" },
+            ["Druid"]         = new() { Name = "Druid" },
+            ["Demon Hunter"]  = new() { Name = "Demon Hunter" },
+            ["Evoker"]        = new() { Name = "Evoker" }
         };
 
         var races = new Dictionary<string, Race>
         {
-            ["Human"]               = new() { Id = 1,  Name = "Human",               IsNeutral = false },
-            ["Dwarf"]               = new() { Id = 2,  Name = "Dwarf",               IsNeutral = false },
-            ["Dark Iron Dwarf"]     = new() { Id = 3,  Name = "Dark Iron Dwarf",     IsNeutral = false },
-            ["Gnome"]               = new() { Id = 4,  Name = "Gnome",               IsNeutral = false },
-            ["Night Elf"]           = new() { Id = 5,  Name = "Night Elf",           IsNeutral = false },
-            ["Draenei"]             = new() { Id = 6,  Name = "Draenei",             IsNeutral = false },
-            ["Lightforged Draenei"] = new() { Id = 7,  Name = "Lightforged Draenei", IsNeutral = false },
-            ["Worgen"]              = new() { Id = 8,  Name = "Worgen",              IsNeutral = false },
-            ["Void Elf"]            = new() { Id = 9,  Name = "Void Elf",            IsNeutral = false },
-            ["Kul Tiran"]           = new() { Id = 10, Name = "Kul Tiran",           IsNeutral = false },
-            ["Mechagnome"]          = new() { Id = 11, Name = "Mechagnome",          IsNeutral = false },
-            ["Orc"]                 = new() { Id = 12, Name = "Orc",                 IsNeutral = false },
-            ["Mag'har Orc"]         = new() { Id = 13, Name = "Mag'har Orc",         IsNeutral = false },
-            ["Undead"]              = new() { Id = 14, Name = "Undead",              IsNeutral = false },
-            ["Tauren"]              = new() { Id = 15, Name = "Tauren",              IsNeutral = false },
-            ["Highmountain Tauren"] = new() { Id = 16, Name = "Highmountain Tauren", IsNeutral = false },
-            ["Troll"]               = new() { Id = 17, Name = "Troll",               IsNeutral = false },
-            ["Zandalari Troll"]     = new() { Id = 18, Name = "Zandalari Troll",     IsNeutral = false },
-            ["Blood Elf"]           = new() { Id = 19, Name = "Blood Elf",           IsNeutral = false },
-            ["Goblin"]              = new() { Id = 20, Name = "Goblin",              IsNeutral = false },
-            ["Vulpera"]             = new() { Id = 21, Name = "Vulpera",             IsNeutral = false },
-            ["Nightborne"]          = new() { Id = 22, Name = "Nightborne",          IsNeutral = false },
-            ["Pandaren"]            = new() { Id = 23, Name = "Pandaren",            IsNeutral = true  },
-            ["Dracthyr"]            = new() { Id = 24, Name = "Dracthyr",            IsNeutral = true  },
-            ["Earthen"]             = new() { Id = 25, Name = "Earthen",             IsNeutral = true  }
+            ["Human"]               = new() { Name = "Human",               IsNeutral = false },
+            ["Dwarf"]               = new() { Name = "Dwarf",               IsNeutral = false },
+            ["Dark Iron Dwarf"]     = new() { Name = "Dark Iron Dwarf",     IsNeutral = false },
+            ["Gnome"]               = new() { Name = "Gnome",               IsNeutral = false },
+            ["Night Elf"]           = new() { Name = "Night Elf",           IsNeutral = false },
+            ["Draenei"]             = new() { Name = "Draenei",             IsNeutral = false },
+            ["Lightforged Draenei"] = new() { Name = "Lightforged Draenei", IsNeutral = false },
+            ["Worgen"]              = new() { Name = "Worgen",              IsNeutral = false },
+            ["Void Elf"]            = new() { Name = "Void Elf",            IsNeutral = false },
+            ["Kul Tiran"]           = new() { Name = "Kul Tiran",           IsNeutral = false },
+            ["Mechagnome"]          = new() { Name = "Mechagnome",          IsNeutral = false },
+            ["Orc"]                 = new() { Name = "Orc",                 IsNeutral = false },
+            ["Mag'har Orc"]         = new() { Name = "Mag'har Orc",         IsNeutral = false },
+            ["Undead"]              = new() { Name = "Undead",              IsNeutral = false },
+            ["Tauren"]              = new() { Name = "Tauren",              IsNeutral = false },
+            ["Highmountain Tauren"] = new() { Name = "Highmountain Tauren", IsNeutral = false },
+            ["Troll"]               = new() { Name = "Troll",               IsNeutral = false },
+            ["Zandalari Troll"]     = new() { Name = "Zandalari Troll",     IsNeutral = false },
+            ["Blood Elf"]           = new() { Name = "Blood Elf",           IsNeutral = false },
+            ["Goblin"]              = new() { Name = "Goblin",              IsNeutral = false },
+            ["Vulpera"]             = new() { Name = "Vulpera",             IsNeutral = false },
+            ["Nightborne"]          = new() { Name = "Nightborne",          IsNeutral = false },
+            ["Pandaren"]            = new() { Name = "Pandaren",            IsNeutral = true  },
+            ["Dracthyr"]            = new() { Name = "Dracthyr",            IsNeutral = true  },
+            ["Earthen"]             = new() { Name = "Earthen",             IsNeutral = true  }
         };
 
         var professions = new List<Profession>
         {
-            new() { Id = 1,  Name = "Alchemy",        IsPrimary = true  },
-            new() { Id = 2,  Name = "Blacksmithing",  IsPrimary = true  },
-            new() { Id = 3,  Name = "Leatherworking", IsPrimary = true  },
-            new() { Id = 4,  Name = "Tailoring",      IsPrimary = true  },
-            new() { Id = 5,  Name = "Engineering",    IsPrimary = true  },
-            new() { Id = 6,  Name = "Enchanting",     IsPrimary = true  },
-            new() { Id = 7,  Name = "Inscription",    IsPrimary = true  },
-            new() { Id = 8,  Name = "Jewelcrafting",  IsPrimary = true  },
-            new() { Id = 9,  Name = "Herbalism",      IsPrimary = true  },
-            new() { Id = 10, Name = "Mining",         IsPrimary = true  },
-            new() { Id = 11, Name = "Skinning",       IsPrimary = true  },
-            new() { Id = 12, Name = "Cooking",        IsPrimary = false },
-            new() { Id = 13, Name = "Fishing",        IsPrimary = false },
-            new() { Id = 14, Name = "Archaeology",    IsPrimary = false }
+            new() { Name = "Alchemy",        IsPrimary = true  },
+            new() { Name = "Blacksmithing",  IsPrimary = true  },
+            new() { Name = "Leatherworking", IsPrimary = true  },
+            new() { Name = "Tailoring",      IsPrimary = true  },
+            new() { Name = "Engineering",    IsPrimary = true  },
+            new() { Name = "Enchanting",     IsPrimary = true  },
+            new() { Name = "Inscription",    IsPrimary = true  },
+            new() { Name = "Jewelcrafting",  IsPrimary = true  },
+            new() { Name = "Herbalism",      IsPrimary = true  },
+            new() { Name = "Mining",         IsPrimary = true  },
+            new() { Name = "Skinning",       IsPrimary = true  },
+            new() { Name = "Cooking",        IsPrimary = false },
+            new() { Name = "Fishing",        IsPrimary = false },
+            new() { Name = "Archaeology",    IsPrimary = false }
         };
 
         var factionRaceMappings = new Dictionary<string, string[]>
