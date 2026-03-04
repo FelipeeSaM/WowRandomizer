@@ -8,6 +8,7 @@
   </Folder>
   <Folder Name="/Services/">
     <Project Path="Services/WowRandomizer.Api/WowRandomizer.Api.csproj" Id="db7072c5-8023-4d19-9dcb-dd9599489203" />
+    <Project Path="Services/WowRandomizer.Character.Api/WowRandomizer.Character.Api.csproj" />
   </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />

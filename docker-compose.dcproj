@@ -14,5 +14,12 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="Services\WowRandomizer.Character.Api\appsettings.Development.json" />
+    <None Include="Services\WowRandomizer.Character.Api\appsettings.json" />
+    <None Include="Services\WowRandomizer.Character.Api\Dockerfile" />
+    <None Include="Services\WowRandomizer.Character.Api\GlobalUsings.cs" />
+    <None Include="Services\WowRandomizer.Character.Api\Program.cs" />
+    <None Include="Services\WowRandomizer.Character.Api\Properties\launchSettings.json" />
+    <None Include="Services\WowRandomizer.Character.Api\WowRandomizer.Character.Api.csproj" />
   </ItemGroup>
 </Project>

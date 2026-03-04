@@ -1,6 +1,27 @@
 services:
+  distributedcache:
+    image: redis
+
+  messagebroker:
+    image: rabbitmq:3-management
+
+  randomizerdb:
+    image: mcr.microsoft.com/mssql/server
+
   wowrandomizer.api:
     image: ${DOCKER_REGISTRY-}wowrandomizerapi
     build:
       context: .
       dockerfile: Services/WowRandomizer.Api/Dockerfile
+
+  wowrandomizer.character.api:
+    image: ${DOCKER_REGISTRY-}wowrandomizercharacterapi
+    build:
+      context: .
+      dockerfile: Services/WowRandomizer.Character.Api/Dockerfile
+
+  yarpgateway:
+    image: ${DOCKER_REGISTRY-}yarpgateway
+    build:
+      context: .
+      dockerfile: ApiGateways/YarpApiGateway/Dockerfile
