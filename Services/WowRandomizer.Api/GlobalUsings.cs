@@ -1,8 +1,12 @@
 ﻿global using BuildingBlocks.Concerns.Behaviors;
+global using BuildingBlocks.Messaging.Events;
 global using Carter;
+global using MassTransit;
 global using MediatR;
 global using BuildingBlocks.Concerns.CQRS;
 global using FluentValidation;
 global using Mapster;
 global using Microsoft.EntityFrameworkCore;
+global using WowRandomizer.Api.Database;
 global using WowRandomizer.Api.Entities;
+global using WowRandomizer.Api.Features.Character;
