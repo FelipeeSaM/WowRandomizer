@@ -49,7 +49,7 @@ public class GenerateCustomCharacterCommandHandler(AppDbContext db, IPublishEndp
         var compatibleRaces = await racesQuery.ToListAsync(cancellationToken);
 
         if (compatibleRaces.Count == 0)
-            throw new ArgumentException("No compatible race found for the given combination of faction, race and class.");
+            throw new ArgumentException("No compatible race found for the given combination of faction, race and class."); 
 
         var race = compatibleRaces[Random.Shared.Next(compatibleRaces.Count)];
 
