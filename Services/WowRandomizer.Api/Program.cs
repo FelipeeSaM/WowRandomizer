@@ -1,8 +1,12 @@
+using BuildingBlocks.Concerns.Logging;
 using BuildingBlocks.Messaging.MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using WowRandomizer.Api.Database;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog(SeriloggerConfiguration.Configure);
 
 builder.Services.AddCarter(new DependencyContextAssemblyCatalog([typeof(Program).Assembly]));
 
@@ -27,8 +31,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await context.Database.MigrateAsync();
-    await DataSeeder.SeedAsync(context);
+    //await context.Database.MigrateAsync();
+    //await DataSeeder.SeedAsync(context);
 }
 
 app.MapCarter();
