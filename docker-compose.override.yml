@@ -84,3 +84,40 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  elasticsearch:
+    container_name: elasticsearch
+    environment:
+      - xpack.security.enabled=true
+      - discovery.type=single-node
+      - xpack.watcher.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    restart: always
+    ports:
+      - "9200:9200"
+    volumes:
+        - elasticsearch-data:/usr/share/elasticsearch/data
+
+  kibana:
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    restart: always
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  portainer:
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+
+volumes:
+  elasticsearch-data:
+  portainer-data:

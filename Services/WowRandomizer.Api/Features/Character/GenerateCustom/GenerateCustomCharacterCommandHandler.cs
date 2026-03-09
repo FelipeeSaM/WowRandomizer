@@ -36,8 +36,8 @@ public class GenerateCustomCharacterCommandHandler(AppDbContext db, IPublishEndp
         var secondaryTask = GenerateRandomProfessions(isPrimary: false, cancellationToken);
         await Task.WhenAll(primaryTask, secondaryTask);
 
-        var pickedPrimary   = await primaryTask;
-        var pickedSecondary = await secondaryTask;
+        var pickedPrimary   = primaryTask.Result;
+        var pickedSecondary = secondaryTask.Result;
 
         var result = new GenerateCharacterResult(
             Guid.NewGuid(),
