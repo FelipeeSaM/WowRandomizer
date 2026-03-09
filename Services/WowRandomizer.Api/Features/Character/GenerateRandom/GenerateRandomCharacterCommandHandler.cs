@@ -1,5 +1,6 @@
 using BuildingBlocks.Messaging.Events;
 using MassTransit;
+using Polly.Registry;
 using WowRandomizer.Api.Features.Character;
 
 namespace WowRandomizer.Api.Features.Character.GenerateRandom;

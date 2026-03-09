@@ -17,8 +17,8 @@ namespace BuildingBlocks.Concerns.Polly
                 pipeline
                     .AddRetry(new RetryStrategyOptions
                     {
-                        MaxRetryAttempts = 3,
-                        Delay            = TimeSpan.FromSeconds(2),
+                        MaxRetryAttempts = 5,
+                        Delay            = TimeSpan.FromSeconds(3),
                         BackoffType      = DelayBackoffType.Exponential,
                         UseJitter        = true,
                         OnRetry = args =>
@@ -26,8 +26,9 @@ namespace BuildingBlocks.Concerns.Polly
                             logger.LogWarning(
                                 "[Polly:database] Retry {AttemptNumber} of {MaxAttempts} — Exception: {ExceptionMessage}",
                                 args.AttemptNumber + 1,
-                                3,
+                                5,
                                 args.Outcome.Exception?.Message);
+                           
                             return ValueTask.CompletedTask;
                         }
                     })
@@ -37,8 +38,9 @@ namespace BuildingBlocks.Concerns.Polly
                         OnTimeout = args =>
                         {
                             logger.LogError(
-                                "[Polly:database] Timeout after {TimeoutSeconds}s — operation cancelled",
+                                "[Polly:database] Timeout after {TimeoutSeconds}s - operation cancelled",
                                 args.Timeout.TotalSeconds);
+
                             return ValueTask.CompletedTask;
                         }
                     });
