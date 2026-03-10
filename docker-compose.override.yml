@@ -24,6 +24,14 @@ services:
     restart: always
     ports:
       - "1433:1433"
+    volumes:
+      - randomizerdb-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Strong!Pass1' -Q 'SELECT 1' -b -C 2>/dev/null || /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Strong!Pass1' -Q 'SELECT 1' -b 2>/dev/null"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
 
   wowrandomizer.api:
     container_name: wowrandomizer.api
@@ -36,10 +44,16 @@ services:
       - MessageBroker__Host=amqp://ecommerce-mq:5672
       - MessageBroker__UserName=guest
       - MessageBroker__Password=guest
+      - ElasticConfiguration__Uri=http://elasticsearch:9200
     depends_on:
-      - randomizerdb
-      - messagebroker
-      - distributedcache
+      randomizerdb:
+        condition: service_healthy
+      messagebroker:
+        condition: service_started
+      distributedcache:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
     ports:
       - "6000:8080"
       - "6050:8081"
@@ -53,15 +67,21 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Database=Server=randomizerdb;Database=WowRandomizerDb;User Id=sa;Password=Strong!Pass1;Encrypt=False;TrustServerCertificate=True
+      - ConnectionStrings__Database=Server=randomizerdb;Database=WowRandomizerCharacterDb;User Id=sa;Password=Strong!Pass1;Encrypt=False;TrustServerCertificate=True
       - ConnectionStrings__Redis=distributedcache:6379
       - MessageBroker__Host=amqp://ecommerce-mq:5672
       - MessageBroker__UserName=guest
       - MessageBroker__Password=guest
+      - ElasticConfiguration__Uri=http://elasticsearch:9200
     depends_on:
-      - randomizerdb
-      - messagebroker
-      - distributedcache
+      randomizerdb:
+        condition: service_healthy
+      messagebroker:
+        condition: service_started
+      elasticsearch:
+        condition: service_started
+      distributedcache:
+        condition: service_started
     ports:
       - "6001:8080"
       - "6051:8081"
@@ -84,3 +104,43 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  elasticsearch:
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.watcher.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    restart: always
+    ports:
+      - "9200:9200"
+    volumes:
+        - elasticsearch-data:/usr/share/elasticsearch/data
+
+  kibana:
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - XPACK_SECURITY_ENABLED=false
+    restart: always
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+
+volumes:
+  elasticsearch-data:
+  portainer-data:
+  randomizerdb-data:

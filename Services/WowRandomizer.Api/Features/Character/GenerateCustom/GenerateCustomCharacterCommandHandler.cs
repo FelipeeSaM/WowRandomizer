@@ -1,5 +1,6 @@
 using BuildingBlocks.Messaging.Events;
 using MassTransit;
+using Polly.Registry;
 using WowRandomizer.Api.Features.Character;
 
 namespace WowRandomizer.Api.Features.Character.GenerateCustom;
@@ -14,14 +15,9 @@ public class GenerateCustomCharacterCommandValidator : AbstractValidator<Generat
 {
     public GenerateCustomCharacterCommandValidator()
     {
-        When(x => x.FactionName is not null, () =>
-            RuleFor(x => x.FactionName).NotEmpty().WithMessage("FactionName cannot be empty."));
-
-        When(x => x.RaceName is not null, () =>
-            RuleFor(x => x.RaceName).NotEmpty().WithMessage("RaceName cannot be empty."));
-
-        When(x => x.ClassName is not null, () =>
-            RuleFor(x => x.ClassName).NotEmpty().WithMessage("ClassName cannot be empty."));
+        RuleFor(x => x.FactionName).NotEmpty().WithMessage("FactionName cannot be empty.");
+        RuleFor(x => x.RaceName).NotEmpty().WithMessage("RaceName cannot be empty.");
+        RuleFor(x => x.ClassName).NotEmpty().WithMessage("ClassName cannot be empty.");
     }
 }
 
@@ -32,51 +28,17 @@ public class GenerateCustomCharacterCommandHandler(AppDbContext db, IPublishEndp
 
     public async Task<GenerateCharacterResult> Handle(GenerateCustomCharacterCommand request, CancellationToken cancellationToken)
     {
-        var racesQuery = db.Races
-            .Include(r => r.FactionRaces).ThenInclude(fr => fr.Faction)
-            .Include(r => r.RaceClasses).ThenInclude(rc => rc.Class)
-            .AsQueryable();
+        var race = await ResolveRace(request, cancellationToken);
+        var factionName = ResolveFactionName(request, race);
+        var className = ResolveClassName(request, race);
+        var gender = GenerateRandomGender();
 
-        if (!string.IsNullOrWhiteSpace(request.FactionName))
-            racesQuery = racesQuery.Where(r => r.FactionRaces.Any(fr => fr.Faction.Name == request.FactionName));
+        var primaryTask   = GenerateRandomProfessions(isPrimary: true,  cancellationToken);
+        var secondaryTask = GenerateRandomProfessions(isPrimary: false, cancellationToken);
+        await Task.WhenAll(primaryTask, secondaryTask);
 
-        if (!string.IsNullOrWhiteSpace(request.ClassName))
-            racesQuery = racesQuery.Where(r => r.RaceClasses.Any(rc => rc.Class.Name == request.ClassName));
-
-        if (!string.IsNullOrWhiteSpace(request.RaceName))
-            racesQuery = racesQuery.Where(r => r.Name == request.RaceName);
-
-        var compatibleRaces = await racesQuery.ToListAsync(cancellationToken);
-
-        if (compatibleRaces.Count == 0)
-            throw new ArgumentException("No compatible race found for the given combination of faction, race and class.");
-
-        var race = compatibleRaces[Random.Shared.Next(compatibleRaces.Count)];
-
-        var factionName = !string.IsNullOrWhiteSpace(request.FactionName)
-            ? request.FactionName
-            : race.FactionRaces.Select(fr => fr.Faction.Name).ToList() is { Count: > 0 } factions
-                ? factions[Random.Shared.Next(factions.Count)]
-                : throw new InvalidOperationException("Race has no associated factions.");
-
-        var className = !string.IsNullOrWhiteSpace(request.ClassName)
-            ? request.ClassName
-            : race.RaceClasses.Select(rc => rc.Class.Name).ToList() is { Count: > 0 } classes
-                ? classes[Random.Shared.Next(classes.Count)]
-                : throw new InvalidOperationException("Race has no associated classes.");
-
-        var gender = Genders[Random.Shared.Next(Genders.Length)];
-
-        var primaryProfessions = await db.Professions
-            .Where(p => p.IsPrimary)
-            .ToListAsync(cancellationToken);
-
-        var secondaryProfessions = await db.Professions
-            .Where(p => !p.IsPrimary)
-            .ToListAsync(cancellationToken);
-
-        var pickedPrimary   = PickRandom(primaryProfessions,   Random.Shared.Next(3));
-        var pickedSecondary = PickRandom(secondaryProfessions, Random.Shared.Next(3));
+        var pickedPrimary   = primaryTask.Result;
+        var pickedSecondary = secondaryTask.Result;
 
         var result = new GenerateCharacterResult(
             Guid.NewGuid(),
@@ -98,6 +60,55 @@ public class GenerateCustomCharacterCommandHandler(AppDbContext db, IPublishEndp
         ), cancellationToken);
 
         return result;
+    }
+
+    private async Task<Race> ResolveRace(GenerateCustomCharacterCommand request, CancellationToken cancellationToken)
+    {
+        var query = db.Races
+            .Include(r => r.FactionRaces).ThenInclude(fr => fr.Faction)
+            .Include(r => r.RaceClasses).ThenInclude(rc => rc.Class)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(request.FactionName))
+            query = query.Where(r => r.FactionRaces.Any(fr => fr.Faction.Name == request.FactionName));
+
+        if (!string.IsNullOrWhiteSpace(request.ClassName))
+            query = query.Where(r => r.RaceClasses.Any(rc => rc.Class.Name == request.ClassName));
+
+        if (!string.IsNullOrWhiteSpace(request.RaceName))
+            query = query.Where(r => r.Name == request.RaceName);
+
+        var compatibleRaces = await query.ToListAsync(cancellationToken);
+
+        if (compatibleRaces.Count == 0)
+            throw new ArgumentException("No compatible race found for the given combination of faction, race and class.");
+
+        return compatibleRaces[Random.Shared.Next(compatibleRaces.Count)];
+    }
+
+    private static string ResolveFactionName(GenerateCustomCharacterCommand request, Race race) =>
+        !string.IsNullOrWhiteSpace(request.FactionName)
+            ? request.FactionName
+            : race.FactionRaces.Select(fr => fr.Faction.Name).ToList() is { Count: > 0 } factions
+                ? factions[Random.Shared.Next(factions.Count)]
+                : throw new InvalidOperationException("Race has no associated factions.");
+
+    private static string ResolveClassName(GenerateCustomCharacterCommand request, Race race) =>
+        !string.IsNullOrWhiteSpace(request.ClassName)
+            ? request.ClassName
+            : race.RaceClasses.Select(rc => rc.Class.Name).ToList() is { Count: > 0 } classes
+                ? classes[Random.Shared.Next(classes.Count)]
+                : throw new InvalidOperationException("Race has no associated classes.");
+
+    private static string GenerateRandomGender() =>
+        Genders[Random.Shared.Next(Genders.Length)];
+
+    private async Task<List<Profession>> GenerateRandomProfessions(bool isPrimary, CancellationToken cancellationToken)
+    {
+        var professions = await db.Professions
+            .Where(p => p.IsPrimary == isPrimary)
+            .ToListAsync(cancellationToken);
+        return PickRandom(professions, Random.Shared.Next(3));
     }
 
     private static List<T> PickRandom<T>(List<T> source, int count)

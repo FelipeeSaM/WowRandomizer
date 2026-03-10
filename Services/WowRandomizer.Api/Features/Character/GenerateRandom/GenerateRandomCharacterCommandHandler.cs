@@ -1,5 +1,6 @@
 using BuildingBlocks.Messaging.Events;
 using MassTransit;
+using Polly.Registry;
 using WowRandomizer.Api.Features.Character;
 
 namespace WowRandomizer.Api.Features.Character.GenerateRandom;
@@ -13,31 +14,12 @@ public class GenerateRandomCharacterCommandHandler(AppDbContext db, IPublishEndp
 
     public async Task<GenerateCharacterResult> Handle(GenerateRandomCharacterCommand request, CancellationToken cancellationToken)
     {
-        var factions = await db.Factions.ToListAsync(cancellationToken);
-        var faction = factions[Random.Shared.Next(factions.Count)];
-
-        var races = await db.Races
-            .Where(r => r.FactionRaces.Any(fr => fr.FactionId == faction.Id))
-            .ToListAsync(cancellationToken);
-        var race = races[Random.Shared.Next(races.Count)];
-
-        var classes = await db.Classes
-            .Where(c => c.RaceClasses.Any(rc => rc.RaceId == race.Id))
-            .ToListAsync(cancellationToken);
-        var gameClass = classes[Random.Shared.Next(classes.Count)];
-
-        var gender = Genders[Random.Shared.Next(Genders.Length)];
-
-        var primaryProfessions = await db.Professions
-            .Where(p => p.IsPrimary)
-            .ToListAsync(cancellationToken);
-
-        var secondaryProfessions = await db.Professions
-            .Where(p => !p.IsPrimary)
-            .ToListAsync(cancellationToken);
-
-        var pickedPrimary   = PickRandom(primaryProfessions,   Random.Shared.Next(3));
-        var pickedSecondary = PickRandom(secondaryProfessions, Random.Shared.Next(3));
+        var faction = await GenerateRandomFaction(cancellationToken);
+        var race = await GenerateRandomRace(faction, cancellationToken);
+        var gameClass = await GenerateRandomClass(race, cancellationToken);
+        var gender = GenerateRandomGender();
+        var pickedPrimary = await GenerateRandomProfessions(true, cancellationToken);
+        var pickedSecondary = await GenerateRandomProfessions(false, cancellationToken);
 
         var result = new GenerateCharacterResult(
             Guid.NewGuid(),
@@ -59,6 +41,39 @@ public class GenerateRandomCharacterCommandHandler(AppDbContext db, IPublishEndp
         ), cancellationToken);
 
         return result;
+    }
+
+    private async Task<Faction> GenerateRandomFaction(CancellationToken cancellationToken)
+    {
+        var factions = await db.Factions.ToListAsync(cancellationToken);
+        return factions[Random.Shared.Next(factions.Count)];
+    }
+
+    private async Task<Race> GenerateRandomRace(Faction faction, CancellationToken cancellationToken)
+    {
+        var races = await db.Races
+            .Where(r => r.FactionRaces.Any(fr => fr.FactionId == faction.Id))
+            .ToListAsync(cancellationToken);
+        return races[Random.Shared.Next(races.Count)];
+    }
+
+    private async Task<GameClass> GenerateRandomClass(Race race, CancellationToken cancellationToken)
+    {
+        var classes = await db.Classes
+            .Where(c => c.RaceClasses.Any(rc => rc.RaceId == race.Id))
+            .ToListAsync(cancellationToken);
+        return classes[Random.Shared.Next(classes.Count)];
+    }
+
+    private static string GenerateRandomGender() =>
+        Genders[Random.Shared.Next(Genders.Length)];
+
+    private async Task<List<Profession>> GenerateRandomProfessions(bool isPrimary, CancellationToken cancellationToken)
+    {
+        var professions = await db.Professions
+            .Where(p => p.IsPrimary == isPrimary)
+            .ToListAsync(cancellationToken);
+        return PickRandom(professions, Random.Shared.Next(3));
     }
 
     private static List<T> PickRandom<T>(List<T> source, int count)

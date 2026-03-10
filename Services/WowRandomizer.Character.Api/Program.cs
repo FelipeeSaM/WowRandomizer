@@ -1,8 +1,15 @@
+using BuildingBlocks.Concerns.Logging;
+using BuildingBlocks.Concerns.Polly;
 using BuildingBlocks.Messaging.MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using WowRandomizer.Character.Api.Database;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog(SeriloggerConfiguration.Configure);
+
+builder.Services.PollyConfigure();
 
 builder.Services.AddCarter(new DependencyContextAssemblyCatalog([typeof(Program).Assembly]));
 
