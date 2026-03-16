@@ -9,6 +9,10 @@
       {
         "Path": "Services\\WowRandomizer.Character.Api\\WowRandomizer.Character.Api.csproj",
         "Action": "Start"
+      },
+      {
+        "Path": "ApiGateways\\YarpApiGateway\\YarpApiGateway.csproj",
+        "Action": "Start"
       }
     ]
   }
