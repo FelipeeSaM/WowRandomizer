@@ -1,5 +1,6 @@
 using BuildingBlocks.Concerns.Logging;
 using BuildingBlocks.Concerns.Polly;
+using BuildingBlocks.Concerns.Redis;
 using BuildingBlocks.Messaging.MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -24,8 +25,7 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
 
-builder.Services.AddStackExchangeRedisCache(options =>
-    options.Configuration = builder.Configuration.GetConnectionString("Redis"));
+builder.Services.AddRedisCache(builder.Configuration);
 
 builder.Services.AddMessageBroker(builder.Configuration);
 

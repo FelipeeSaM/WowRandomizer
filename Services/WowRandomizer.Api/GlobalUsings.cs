@@ -10,3 +10,4 @@ global using Microsoft.EntityFrameworkCore;
 global using WowRandomizer.Api.Database;
 global using WowRandomizer.Api.Entities;
 global using WowRandomizer.Api.Features.Character;
+global using BuildingBlocks.Concerns.Redis;
