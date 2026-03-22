@@ -1,4 +1,5 @@
-
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace WowRandomizer.Api.Features.Classes.GetClasses;
 
@@ -8,34 +9,38 @@ public record GetClassesResult(List<ClassResponse> Classes);
 
 public record ClassResponse(int Id, string Name);
 
-public class GetClassesQueryHandler(AppDbContext db, ICacheService cache)
+public class GetClassesQueryHandler(AppDbContext db, IDistributedCache cache)
     : IQueryHandler<GetClassesQuery, GetClassesResult>
 {
     public async Task<GetClassesResult> Handle(GetClassesQuery request, CancellationToken cancellationToken)
     {
-        var cacheKey = string.IsNullOrWhiteSpace(request.RaceName)
-            ? "classes:all"
-            : $"classes:race:{request.RaceName}";
+        var cacheKey = "GetClasses";
 
-        var classes = await cache.GetOrSetAsync(
-            key: cacheKey,
-            factory: async () =>
-            {
-                var query = db.Classes.AsQueryable();
+        var cachedData = await cache.GetStringAsync(cacheKey, cancellationToken);
 
-                if (!string.IsNullOrWhiteSpace(request.RaceName))
-                    query = query.Where(c => c.RaceClasses.Any(rc => rc.Race.Name == request.RaceName));
+        List<ClassResponse> classes;
 
-                var result = await query
-                    .Select(c => new ClassResponse(c.Id, c.Name))
-                    .ToListAsync(cancellationToken);
+        if (cachedData is not null)
+        {
+            classes = JsonSerializer.Deserialize<List<ClassResponse>>(cachedData)!;
+        }
+        else 
+        {
+            var options = new DistributedCacheEntryOptions();
+            options.SetAbsoluteExpiration(TimeSpan.FromMinutes(2));
 
-                return result;
-            },
-            expiration: TimeSpan.FromMinutes(30),
-            cancellationToken: cancellationToken
-        );
+            var query = db.Classes.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(request.RaceName))
+                query = query.Where(c => c.RaceClasses.Any(rc => rc.Race.Name == request.RaceName));
 
-        return new GetClassesResult(classes ?? new List<ClassResponse>());
+            classes = await query
+                .Select(c => new ClassResponse(c.Id, c.Name))
+                .ToListAsync(cancellationToken);
+
+            var serializedData = JsonSerializer.Serialize(classes);
+            await cache.SetStringAsync(cacheKey, serializedData, options, cancellationToken);
+        }
+
+        return new GetClassesResult(classes);
     }
 }

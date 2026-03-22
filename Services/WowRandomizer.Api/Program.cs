@@ -25,7 +25,13 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
 
-builder.Services.AddRedisCache(builder.Configuration);
+var redisConfig = builder.Configuration.GetSection("Redis").Get<RedisConfig>();
+
+builder.Services.AddStackExchangeRedisCache(opt =>
+{
+    opt.InstanceName = redisConfig!.InstanceName;
+    opt.Configuration = redisConfig.Configuration;
+});
 
 builder.Services.AddMessageBroker(builder.Configuration);
 

@@ -1,10 +1,11 @@
 using BuildingBlocks.Messaging.Events;
 using MassTransit;
+using Microsoft.Extensions.Caching.Distributed;
 using WowRandomizer.Character.Api.Database;
 
 namespace WowRandomizer.Character.Api.Consumers;
 
-public class CharacterGeneratedEventConsumer(CharacterDbContext db)
+public class CharacterGeneratedEventConsumer(CharacterDbContext db, IDistributedCache cache)
     : IConsumer<CharacterGeneratedEvent>
 {
     public async Task Consume(ConsumeContext<CharacterGeneratedEvent> context)
@@ -26,5 +27,7 @@ public class CharacterGeneratedEventConsumer(CharacterDbContext db)
 
         db.Characters.Add(character);
         await db.SaveChangesAsync(context.CancellationToken);
+
+        await cache.RemoveAsync("CharactersList", context.CancellationToken);
     }
 }
