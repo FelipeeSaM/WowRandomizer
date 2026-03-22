@@ -23,7 +23,16 @@ builder.Services.AddMediatR(config =>
 
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
-builder.Services.AddRedisCache(builder.Configuration);
+builder.Services.AddDbContext<CharacterDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
+
+var redisConfig = builder.Configuration.GetSection("Redis").Get<RedisConfig>();
+
+builder.Services.AddStackExchangeRedisCache(opt =>
+{
+    opt.InstanceName = redisConfig!.InstanceName;
+    opt.Configuration = redisConfig.Configuration;
+});
 
 builder.Services.AddMessageBroker(builder.Configuration, typeof(Program).Assembly);
 
