@@ -36,22 +36,33 @@ services:
     image: ${DOCKER_REGISTRY-}wowrandomizerapi
     pull_policy: build
     build:
-      context: .
+      context: ./backend
       dockerfile: Services/WowRandomizer.Api/Dockerfile
 
   wowrandomizer.character.api:
     image: ${DOCKER_REGISTRY-}wowrandomizercharacterapi
     pull_policy: build
     build:
-      context: .
+      context: ./backend
       dockerfile: Services/WowRandomizer.Character.Api/Dockerfile
 
   yarpgateway:
     image: ${DOCKER_REGISTRY-}yarpgateway
     pull_policy: build
     build:
-      context: .
+      context: ./backend
       dockerfile: ApiGateways/YarpApiGateway/Dockerfile
+
+  web:
+    container_name: wowrandomizer-web
+    image: ${DOCKER_REGISTRY-}wowrandomizerweb
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - yarpgateway
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:9.3.1
