@@ -60,3 +60,18 @@ DocumentLayout.json
 *.v2
 *.suo
 *.vs
+
+# Node
+web/node_modules/
+web/dist/
+web/.env.local
+web/.env.*.local
+web/npm-debug.log*
+web/yarn-debug.log*
+web/yarn-error.log*
+
+# .NET
+backend/**/*.user
+backend/**/bin/
+backend/**/obj/
+backend/**/.vs/
