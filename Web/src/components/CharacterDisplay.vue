@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Character } from '@/types'
+import { getProfessionEmoji, getClassEmoji, getRaceEmoji } from '../utils/imageHelpers'
 
 const props = defineProps<{
   character: Character
@@ -65,14 +66,14 @@ const formattedDate = computed(() => {
         <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
           <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Raça</p>
           <p class="text-xl font-bold text-gray-900 dark:text-white">
-            {{ character.race }}
+            {{ character.race }} {{ getRaceEmoji(character.race) }}
           </p>
         </div>
 
         <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
           <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Classe</p>
           <p class="text-xl font-bold text-gray-900 dark:text-white">
-            {{ character.class }}
+            {{ character.class }} {{ getClassEmoji(character.class) }}
           </p>
         </div>
       </div>
@@ -93,12 +94,12 @@ const formattedDate = computed(() => {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div v-if="character.profession1" class="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3 border border-amber-200 dark:border-amber-800">
             <p class="text-amber-900 dark:text-amber-200 font-medium">
-              {{ character.profession1 }}
+              {{ character.profession1 }} {{ getProfessionEmoji(character.profession1) }}
             </p>
           </div>
           <div v-if="character.profession2" class="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3 border border-amber-200 dark:border-amber-800">
             <p class="text-amber-900 dark:text-amber-200 font-medium">
-              {{ character.profession2 }}
+              {{ character.profession2 }} {{ getProfessionEmoji(character.profession2) }}
             </p>
           </div>
         </div>
@@ -112,12 +113,12 @@ const formattedDate = computed(() => {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div v-if="character.subProfession1" class="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800">
             <p class="text-green-900 dark:text-green-200 font-medium">
-              {{ character.subProfession1 }}
+              {{ character.subProfession1 }} {{ getProfessionEmoji(character.subProfession1) }}
             </p>
           </div>
           <div v-if="character.subProfession2" class="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800">
             <p class="text-green-900 dark:text-green-200 font-medium">
-              {{ character.subProfession2 }}
+              {{ character.subProfession2 }} {{ getProfessionEmoji(character.subProfession2) }}
             </p>
           </div>
         </div>

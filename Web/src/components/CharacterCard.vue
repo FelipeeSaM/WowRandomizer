@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Character } from '@/types'
+import { getProfessionEmoji, getClassEmoji, getRaceEmoji } from '../utils/imageHelpers'
 
 const props = defineProps<{
   character: Character
@@ -53,11 +54,11 @@ const formattedDate = computed(() => {
       <div class="flex justify-between items-center">
         <div>
           <p class="text-xs text-gray-500 dark:text-gray-400">Raça</p>
-          <p class="font-semibold text-gray-900 dark:text-white">{{ character.race }}</p>
+          <p class="font-semibold text-gray-900 dark:text-white">{{ character.race }} {{ getRaceEmoji(character.race) }}</p>
         </div>
         <div class="text-right">
           <p class="text-xs text-gray-500 dark:text-gray-400">Classe</p>
-          <p class="font-semibold text-gray-900 dark:text-white">{{ character.class }}</p>
+          <p class="font-semibold text-gray-900 dark:text-white">{{ character.class }} {{ getClassEmoji(character.class) }}</p>
         </div>
       </div>
 
@@ -77,13 +78,13 @@ const formattedDate = computed(() => {
             v-if="character.profession1"
             class="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs rounded-full"
           >
-            {{ character.profession1 }}
+            {{ character.profession1 }} {{ getProfessionEmoji(character.profession1) }}
           </span>
           <span 
             v-if="character.profession2"
             class="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs rounded-full"
           >
-            {{ character.profession2 }}
+            {{ character.profession2 }} {{ getProfessionEmoji(character.profession2) }}
           </span>
         </div>
       </div>
