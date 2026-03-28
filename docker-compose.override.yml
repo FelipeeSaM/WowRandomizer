@@ -132,6 +132,15 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer-data:/data
 
+  web:
+    container_name: wowrandomizer-web
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:80"
+    depends_on:
+      - yarpgateway
+
 volumes:
   elasticsearch-data:
   portainer-data:
