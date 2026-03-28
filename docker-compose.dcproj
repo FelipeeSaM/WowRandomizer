@@ -9,6 +9,9 @@
     <DockerServiceName>wowrandomizer.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Services\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
@@ -21,5 +24,11 @@
     <None Include="Services\WowRandomizer.Character.Api\Program.cs" />
     <None Include="Services\WowRandomizer.Character.Api\Properties\launchSettings.json" />
     <None Include="Services\WowRandomizer.Character.Api\WowRandomizer.Character.Api.csproj" />
+    <None Include="web\.dockerignore" />
+    <None Include="web\.env.development" />
+    <None Include="web\.env.docker" />
+    <None Include="web\Dockerfile" />
+    <None Include="web\nginx.conf" />
+    <None Include="web\src\config\api.ts" />
   </ItemGroup>
 </Project>
