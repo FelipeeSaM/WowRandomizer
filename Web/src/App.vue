@@ -39,6 +39,13 @@ import { RouterLink, RouterView } from 'vue-router'
             >
               📜 Personagens
             </RouterLink>
+            <RouterLink
+              to="/custom"
+              class="px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium"
+              active-class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300"
+            >
+              🛠️ Customizar
+            </RouterLink>
           </div>
         </div>
       </div>
