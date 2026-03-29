@@ -8,7 +8,9 @@ namespace WowRandomizer.Api.Features.Character.GenerateCustom;
 public record GenerateCustomCharacterCommand(
     string? FactionName,
     string? RaceName,
-    string? ClassName
+    string? ClassName,
+    List<Profession> MainProfession,
+    List<Profession> SubProfession
 ) : ICommand<GenerateCharacterResult>;
 
 public class GenerateCustomCharacterCommandValidator : AbstractValidator<GenerateCustomCharacterCommand>
@@ -33,8 +35,8 @@ public class GenerateCustomCharacterCommandHandler(AppDbContext db, IPublishEndp
         var className = ResolveClassName(request, race);
         var gender = GenerateRandomGender();
 
-        var primaryTask   = GenerateRandomProfessions(isPrimary: true,  cancellationToken);
-        var secondaryTask = GenerateRandomProfessions(isPrimary: false, cancellationToken);
+        var primaryTask   = GenerateRandomProfessions(isPrimary: true, request.MainProfession, cancellationToken);
+        var secondaryTask = GenerateRandomProfessions(isPrimary: false, request.SubProfession, cancellationToken);
         await Task.WhenAll(primaryTask, secondaryTask);
 
         var pickedPrimary   = primaryTask.Result;
@@ -103,17 +105,183 @@ public class GenerateCustomCharacterCommandHandler(AppDbContext db, IPublishEndp
     private static string GenerateRandomGender() =>
         Genders[Random.Shared.Next(Genders.Length)];
 
-    private async Task<List<Profession>> GenerateRandomProfessions(bool isPrimary, CancellationToken cancellationToken)
+    private async Task<List<Profession>> GenerateRandomProfessions(bool isPrimary, List<Profession> professionsList, CancellationToken cancellationToken)
     {
+        if (professionsList.Count == 2) return professionsList.Where(c => c.IsPrimary == isPrimary).ToList();
+        List<Profession> professionsReturn = new List<Profession>();
         var professions = await db.Professions
             .Where(p => p.IsPrimary == isPrimary)
             .ToListAsync(cancellationToken);
-        return PickRandom(professions, Random.Shared.Next(3));
-    }
+        if(professionsList.Count == 1)
+        {
+            professionsReturn.Add(professionsList[0]);
+            professionsReturn.Add(professions.Where(p => p.Id != professionsList[0].Id).OrderBy(_ => Random.Shared.Next()).FirstOrDefault()!);
+        } else
+        {
+            professionsReturn.AddRange(professions.OrderBy(_ => Random.Shared.Next()).Take(2));
+        }
 
-    private static List<T> PickRandom<T>(List<T> source, int count)
-    {
-        if (count <= 0 || source.Count == 0) return [];
-        return [.. source.OrderBy(_ => Random.Shared.Next()).Take(count)];
+        return professionsReturn;
     }
 }
+//using BuildingBlocks.Messaging.Events;
+//using MassTransit;
+//using Polly.Registry;
+//using WowRandomizer.Api.Features.Character;
+
+//namespace WowRandomizer.Api.Features.Character.GenerateCustom;
+
+//public record GenerateCustomCharacterCommand(
+//    string? FactionName,
+//    string? RaceName,
+//    string? ClassName,
+//    List<Profession> MainProfession,
+//    List<Profession> SubProfession
+//) : ICommand<GenerateCharacterResult>;
+
+//public class GenerateCustomCharacterCommandValidator : AbstractValidator<GenerateCustomCharacterCommand>
+//{
+//    public GenerateCustomCharacterCommandValidator()
+//    {
+//        RuleFor(x => x.FactionName).NotEmpty().WithMessage("FactionName cannot be empty.");
+//        RuleFor(x => x.RaceName).NotEmpty().WithMessage("RaceName cannot be empty.");
+//        RuleFor(x => x.ClassName).NotEmpty().WithMessage("ClassName cannot be empty.");
+//    }
+//}
+
+//public class GenerateCustomCharacterCommandHandler(AppDbContext db, IPublishEndpoint publishEndpoint)
+//    : ICommandHandler<GenerateCustomCharacterCommand, GenerateCharacterResult>
+//{
+//    private static readonly string[] Genders = ["Male", "Female"];
+
+//    public async Task<GenerateCharacterResult> Handle(GenerateCustomCharacterCommand request, CancellationToken cancellationToken)
+//    {
+//        var race = await ResolveRace(request, cancellationToken);
+//        var factionName = ResolveFactionName(request, race);
+//        var className = ResolveClassName(request, race);
+//        var gender = GenerateRandomGender();
+
+//        var primaryTask = GenerateProfessions(isPrimary: true, request.MainProfession, cancellationToken);
+//        var secondaryTask = GenerateProfessions(isPrimary: false, request.SubProfession, cancellationToken);
+//        await Task.WhenAll(primaryTask, secondaryTask);
+
+//        var pickedPrimary = primaryTask.Result;
+//        var pickedSecondary = secondaryTask.Result;
+
+//        var result = new GenerateCharacterResult(
+//            Guid.NewGuid(),
+//            factionName,
+//            race.Name,
+//            className,
+//            gender,
+//            pickedPrimary.ElementAtOrDefault(0)?.Name,
+//            pickedPrimary.ElementAtOrDefault(1)?.Name,
+//            pickedSecondary.ElementAtOrDefault(0)?.Name,
+//            pickedSecondary.ElementAtOrDefault(1)?.Name,
+//            DateTime.UtcNow
+//        );
+
+//        await publishEndpoint.Publish(new CharacterGeneratedEvent(
+//            result.Id, result.Faction, result.Race, result.Class, result.Gender,
+//            result.Profession1, result.Profession2, result.SubProfession1, result.SubProfession2,
+//            result.GeneratedAt
+//        ), cancellationToken);
+
+//        return result;
+//    }
+
+//    private async Task<Race> ResolveRace(GenerateCustomCharacterCommand request, CancellationToken cancellationToken)
+//    {
+//        var query = db.Races
+//            .Include(r => r.FactionRaces).ThenInclude(fr => fr.Faction)
+//            .Include(r => r.RaceClasses).ThenInclude(rc => rc.Class)
+//            .AsQueryable();
+
+//        if (!string.IsNullOrWhiteSpace(request.FactionName))
+//            query = query.Where(r => r.FactionRaces.Any(fr => fr.Faction.Name == request.FactionName));
+
+//        if (!string.IsNullOrWhiteSpace(request.ClassName))
+//            query = query.Where(r => r.RaceClasses.Any(rc => rc.Class.Name == request.ClassName));
+
+//        if (!string.IsNullOrWhiteSpace(request.RaceName))
+//            query = query.Where(r => r.Name == request.RaceName);
+
+//        var compatibleRaces = await query.ToListAsync(cancellationToken);
+
+//        if (compatibleRaces.Count == 0)
+//            throw new ArgumentException("No compatible race found for the given combination of faction, race and class.");
+
+//        return compatibleRaces[Random.Shared.Next(compatibleRaces.Count)];
+//    }
+
+//    private static string ResolveFactionName(GenerateCustomCharacterCommand request, Race race) =>
+//        !string.IsNullOrWhiteSpace(request.FactionName)
+//            ? request.FactionName
+//            : race.FactionRaces.Select(fr => fr.Faction.Name).ToList() is { Count: > 0 } factions
+//                ? factions[Random.Shared.Next(factions.Count)]
+//                : throw new InvalidOperationException("Race has no associated factions.");
+
+//    private static string ResolveClassName(GenerateCustomCharacterCommand request, Race race) =>
+//        !string.IsNullOrWhiteSpace(request.ClassName)
+//            ? request.ClassName
+//            : race.RaceClasses.Select(rc => rc.Class.Name).ToList() is { Count: > 0 } classes
+//                ? classes[Random.Shared.Next(classes.Count)]
+//                : throw new InvalidOperationException("Race has no associated classes.");
+
+//    private static string GenerateRandomGender() =>
+//        Genders[Random.Shared.Next(Genders.Length)];
+
+//    private async Task<List<Profession>> GenerateProfessions(bool isPrimary, List<Profession>? providedProfessions, CancellationToken cancellationToken)
+//    {
+//        // guard clause - keep as requested
+//        if (providedProfessions!.Count == 2) return providedProfessions.Where(c => c.IsPrimary == isPrimary).ToList();
+
+//        var pool = await db.Professions
+//            .Where(p => p.IsPrimary == isPrimary)
+//            .ToListAsync(cancellationToken);
+
+//        if (pool.Count == 0)
+//            return new List<Profession>();
+
+//        // Match provided ones first (preserve order), then fill remaining slots randomly
+//        var matched = MatchProvidedProfessions(providedProfessions, pool);
+//        if (matched.Count >= 2)
+//            return matched.Take(2).ToList();
+
+//        var remaining = 2 - matched.Count;
+//        var candidates = pool.Where(p => !matched.Any(m => m.Id == p.Id)).ToList();
+//        if (candidates.Count == 0)
+//            return matched;
+
+//        var randomPicks = PickRandomUnique(candidates, remaining);
+//        matched.AddRange(randomPicks);
+//        return matched;
+//    }
+
+//    private static List<Profession> MatchProvidedProfessions(List<Profession>? provided, List<Profession> pool)
+//    {
+//        var result = new List<Profession>();
+//        if (provided is null || provided.Count == 0) return result;
+
+//        foreach (var prov in provided)
+//        {
+//            if (prov is null || string.IsNullOrWhiteSpace(prov.Name))
+//                continue;
+
+//            var match = pool.FirstOrDefault(p => string.Equals(p.Name, prov.Name, StringComparison.OrdinalIgnoreCase));
+//            if (match is not null && !result.Any(r => r.Id == match.Id))
+//            {
+//                result.Add(match);
+//                if (result.Count >= 2) break;
+//            }
+//        }
+
+//        return result;
+//    }
+
+//    private static List<Profession> PickRandomUnique(List<Profession> source, int count)
+//    {
+//        if (count <= 0 || source.Count == 0) return new List<Profession>();
+//        return source.OrderBy(_ => Random.Shared.Next()).Take(Math.Min(count, source.Count)).ToList();
+//    }
+//}
