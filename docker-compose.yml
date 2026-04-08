@@ -1,30 +1,68 @@
 services:
   distributedcache:
-    image: redis
+    container_name: redis
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    volumes:
+      - redis-data:/data
+    restart: always
 
   messagebroker:
+    container_name: wowrandomizer-rabbitmq
     image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    restart: always
 
   randomizerdb:
-    image: mcr.microsoft.com/mssql/server
+    container_name: wowrandomizer-sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Strong!Pass1"
+    volumes:
+      - randomizerdb-data:/var/opt/mssql
+    restart: always
 
   wowrandomizer.api:
     image: ${DOCKER_REGISTRY-}wowrandomizerapi
+    pull_policy: build
     build:
-      context: .
+      context: ./backend
       dockerfile: Services/WowRandomizer.Api/Dockerfile
 
   wowrandomizer.character.api:
     image: ${DOCKER_REGISTRY-}wowrandomizercharacterapi
+    pull_policy: build
     build:
-      context: .
+      context: ./backend
       dockerfile: Services/WowRandomizer.Character.Api/Dockerfile
 
   yarpgateway:
     image: ${DOCKER_REGISTRY-}yarpgateway
+    pull_policy: build
     build:
-      context: .
+      context: ./backend
       dockerfile: ApiGateways/YarpApiGateway/Dockerfile
+
+  web:
+    container_name: wowrandomizer-web
+    image: ${DOCKER_REGISTRY-}wowrandomizerweb
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - yarpgateway
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:9.3.1
@@ -39,3 +77,4 @@ volumes:
   elasticsearch-data:
   portainer-data:
   randomizerdb-data:
+  redis-data:
