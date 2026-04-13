@@ -7,8 +7,8 @@ public record GenerateCustomCharacterRequest(
     string? FactionName,
     string? RaceName,
     string? ClassName,
-    List<Profession> MainProfession,
-    List<Profession> SubProfession
+    List<Profession>? MainProfession,
+    List<Profession>? SubProfession
 );
 
 public class GenerateCustomCharacterEndpoint : ICarterModule

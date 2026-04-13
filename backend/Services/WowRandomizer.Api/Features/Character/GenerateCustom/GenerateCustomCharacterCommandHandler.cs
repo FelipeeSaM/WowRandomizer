@@ -9,8 +9,8 @@ public record GenerateCustomCharacterCommand(
     string? FactionName,
     string? RaceName,
     string? ClassName,
-    List<Profession> MainProfession,
-    List<Profession> SubProfession
+    List<Profession>? MainProfession,
+    List<Profession>? SubProfession
 ) : ICommand<GenerateCharacterResult>;
 
 public class GenerateCustomCharacterCommandValidator : AbstractValidator<GenerateCustomCharacterCommand>
@@ -105,8 +105,9 @@ public class GenerateCustomCharacterCommandHandler(AppDbContext db, IPublishEndp
     private static string GenerateRandomGender() =>
         Genders[Random.Shared.Next(Genders.Length)];
 
-    private async Task<List<Profession>> GenerateRandomProfessions(bool isPrimary, List<Profession> professionsList, CancellationToken cancellationToken)
+    private async Task<List<Profession>> GenerateRandomProfessions(bool isPrimary, List<Profession>? professionsList, CancellationToken cancellationToken)
     {
+        professionsList ??= [];
         if (professionsList.Count == 2) return professionsList.Where(c => c.IsPrimary == isPrimary).ToList();
         List<Profession> professionsReturn = new List<Profession>();
         var professions = await db.Professions
