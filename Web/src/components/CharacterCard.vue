@@ -75,7 +75,7 @@ const formattedDate = computed(() => {
       <!-- Professions -->
       <div v-if="character.profession1 || character.profession2" class="space-y-1">
         <p class="text-xs text-gray-500 dark:text-gray-400">🔨 Professions</p>
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap gap-2 justify-center items-center">
           <span 
             v-if="character.profession1"
             class="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs rounded-full"
@@ -87,6 +87,25 @@ const formattedDate = computed(() => {
             class="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs rounded-full"
           >
             {{ character.profession2 }} {{ getProfessionEmoji(character.profession2) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Sub-professions -->
+      <div v-if="character.subProfession1 || character.subProfession2" class="space-y-1">
+        <p class="text-xs text-gray-500 dark:text-gray-400">🔨 Sub-Professions</p>
+        <div class="flex flex-wrap gap-2 justify-center items-center">
+          <span 
+            v-if="character.subProfession1"
+            class="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs rounded-full"
+          >
+            {{ character.subProfession1 }} {{ getProfessionEmoji(character.subProfession1) }}
+          </span>
+          <span 
+            v-if="character.subProfession2"
+            class="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs rounded-full"
+          >
+            {{ character.subProfession2 }} {{ getProfessionEmoji(character.subProfession2) }}
           </span>
         </div>
       </div>
