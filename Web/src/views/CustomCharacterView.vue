@@ -267,22 +267,25 @@ async function onSubmit() {
     warning.value = 'Select at least one parameter or click "Generate Random".'
     return
   }
-  const params: any = {}
+  const params: any = {  }
   if (form.value.faction) params.factionName = form.value.faction
   if (form.value.race) params.raceName = form.value.race
   if (form.value.class) params.className = form.value.class
-  if (form.value.primaryProfessions.length > 0) {
-    params.MainProfession = form.value.primaryProfessions.map(name => {
-      const p = professions.value.find(pr => pr.name === name)
-      return { Name: p?.name ?? name, IsPrimary: p?.isPrimary ?? true }
-    })
-  }
-  if (form.value.secondaryProfessions.length > 0) {
-    params.SubProfession = form.value.secondaryProfessions.map(name => {
-      const p = professions.value.find(pr => pr.name === name)
-      return { Name: p?.name ?? name, IsPrimary: p?.isPrimary ?? false }
-    })
-  }
+    params.mainProfession = form.value.primaryProfessions.map(name => {
+    const p = professions.value.find(pr => pr.name === name)
+    return {
+      name: p?.name ?? name,
+      isPrimary: true
+    }
+  })
+
+  params.subProfession = form.value.secondaryProfessions.map(name => {
+    const p = professions.value.find(pr => pr.name === name)
+    return {
+      name: p?.name ?? name,
+      isPrimary: false
+    }
+  })
   console.log('Sending generation parameters:', params)
   const res = await characterApi.generateCustom(params)
   character.value = res
