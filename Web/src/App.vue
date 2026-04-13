@@ -6,7 +6,7 @@ import { RouterLink, RouterView } from 'vue-router'
   <div class="app">
     <!-- Navigation -->
     <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50">
-      <div class="container mx-auto px-4">
+      <div class="w-full px-4">
         <div class="flex items-center justify-between h-16">
           <!-- Logo -->
           <RouterLink 
@@ -30,21 +30,21 @@ import { RouterLink, RouterView } from 'vue-router'
               class="px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium"
               active-class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300"
             >
-              🎲 Gerar
+              🎲 Generate
             </RouterLink>
             <RouterLink
               to="/characters"
               class="px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium"
               active-class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300"
             >
-              📜 Personagens
+              📜 Characters
             </RouterLink>
             <RouterLink
               to="/custom"
               class="px-4 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium"
               active-class="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300"
             >
-              🛠️ Customizar
+              🛠️ Customize
             </RouterLink>
           </div>
         </div>
@@ -58,9 +58,9 @@ import { RouterLink, RouterView } from 'vue-router'
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-gray-300 py-6 mt-16">
-      <div class="container mx-auto px-4 text-center">
+      <div class="w-full px-4 text-center">
         <p class="text-sm">
-          ⚔️ WowRandomizer - Desenvolvido por 
+          ⚔️ WowRandomizer - Developed by 
           <a 
             href="https://github.com/FelipeeSaM" 
             target="_blank"

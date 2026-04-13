@@ -7,7 +7,7 @@ const props = defineProps<{
   character: Character
 }>()
 
-// Emojis e cores por facção
+// Faction emojis and colors
 const factionConfig = computed(() => {
   const faction = props.character.faction.toLowerCase()
   if (faction.includes('alliance')) {
@@ -27,10 +27,10 @@ const factionConfig = computed(() => {
   }
 })
 
-// Formatação da data
+// Date formatting
 const formattedDate = computed(() => {
   const date = new Date(props.character.generatedAt)
-  return date.toLocaleString('pt-BR', {
+  return date.toLocaleString('en-US', {
     dateStyle: 'short',
     timeStyle: 'short',
   })
@@ -52,7 +52,7 @@ const formattedDate = computed(() => {
               {{ character.faction }}
             </h2>
             <p class="text-sm text-gray-600 dark:text-gray-400">
-              Gerado em {{ formattedDate }}
+              Generated on {{ formattedDate }}
             </p>
           </div>
         </div>
@@ -64,14 +64,14 @@ const formattedDate = computed(() => {
       <!-- Race & Class -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-          <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Raça</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Race</p>
           <p class="text-xl font-bold text-gray-900 dark:text-white">
             {{ character.race }} {{ getRaceEmoji(character.race) }}
           </p>
         </div>
 
         <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-          <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Classe</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Class</p>
           <p class="text-xl font-bold text-gray-900 dark:text-white">
             {{ character.class }} {{ getClassEmoji(character.class) }}
           </p>
@@ -80,16 +80,16 @@ const formattedDate = computed(() => {
 
       <!-- Gender -->
       <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Gênero</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Gender</p>
         <p class="text-xl font-bold text-gray-900 dark:text-white">
-          {{ character.gender === 'Male' ? '♂️ Masculino' : '♀️ Feminino' }}
+          {{ character.gender === 'Male' ? '♂️ Male' : '♀️ Female' }}
         </p>
       </div>
 
       <!-- Professions -->
       <div v-if="character.profession1 || character.profession2" class="space-y-2">
         <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">
-          🔨 Profissões Principais
+          🔨 Primary Professions
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div v-if="character.profession1" class="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3 border border-amber-200 dark:border-amber-800">
@@ -108,7 +108,7 @@ const formattedDate = computed(() => {
       <!-- Sub Professions -->
       <div v-if="character.subProfession1 || character.subProfession2" class="space-y-2">
         <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">
-          🎣 Profissões Secundárias
+          🎣 Secondary Professions
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div v-if="character.subProfession1" class="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800">

@@ -10,7 +10,7 @@ async function handleGenerateRandom() {
   try {
     await characterStore.generateRandom()
   } catch (error) {
-    console.error('Erro ao gerar personagem:', error)
+    console.error('Error generating character:', error)
   } finally {
     isGenerating.value = false
   }
@@ -31,7 +31,7 @@ async function handleGenerateRandom() {
         @click="characterStore.clearError"
         class="mt-2 text-sm text-red-600 dark:text-red-400 hover:underline"
       >
-        Fechar
+        Dismiss
       </button>
     </div>
 
@@ -64,27 +64,27 @@ async function handleGenerateRandom() {
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             />
           </svg>
-          Gerando...
+          Generating...
         </span>
         
         <!-- Normal State -->
         <span v-else class="flex items-center justify-center">
-          🎲 Gerar Personagem Aleatório
+          🎲 Generate Random Character
         </span>
       </button>
 
       <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">
-        Clique para gerar um personagem completamente aleatório
+        Click to generate a completely random character
       </p>
     </div>
 
-    <!-- Stats (opcional) -->
+    <!-- Stats (optional) -->
     <div 
       v-if="characterStore.totalCharacters > 0" 
       class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 text-center"
     >
       <p class="text-sm text-gray-600 dark:text-gray-400">
-        Você já gerou <strong class="text-blue-600 dark:text-blue-400">{{ characterStore.totalCharacters }}</strong> personagem(ns)!
+        You've generated <strong class="text-blue-600 dark:text-blue-400">{{ characterStore.totalCharacters }}</strong> character(s)!
       </p>
     </div>
   </div>

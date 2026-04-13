@@ -7,7 +7,7 @@ const props = defineProps<{
   character: Character
 }>()
 
-// Configuração por facção
+// Faction configuration
 const factionConfig = computed(() => {
   const faction = props.character.faction.toLowerCase()
   if (faction.includes('alliance')) {
@@ -29,7 +29,7 @@ const factionConfig = computed(() => {
 
 const formattedDate = computed(() => {
   const date = new Date(props.character.generatedAt)
-  return date.toLocaleDateString('pt-BR', { dateStyle: 'short' })
+  return date.toLocaleDateString('en-US', { dateStyle: 'short' })
 })
 </script>
 
@@ -53,26 +53,26 @@ const formattedDate = computed(() => {
       <!-- Race & Class -->
       <div class="flex justify-between items-center">
         <div>
-          <p class="text-xs text-gray-500 dark:text-gray-400">Raça</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Race</p>
           <p class="font-semibold text-gray-900 dark:text-white">{{ character.race }} {{ getRaceEmoji(character.race) }}</p>
         </div>
         <div class="text-right">
-          <p class="text-xs text-gray-500 dark:text-gray-400">Classe</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Class</p>
           <p class="font-semibold text-gray-900 dark:text-white">{{ character.class }} {{ getClassEmoji(character.class) }}</p>
         </div>
       </div>
 
       <!-- Gender -->
       <div>
-        <p class="text-xs text-gray-500 dark:text-gray-400">Gênero</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Gender</p>
         <p class="text-sm text-gray-700 dark:text-gray-300">
-          {{ character.gender === 'Male' ? '♂️ Masculino' : '♀️ Feminino' }}
+          {{ character.gender === 'Male' ? '♂️ Male' : '♀️ Female' }}
         </p>
       </div>
 
       <!-- Professions -->
       <div v-if="character.profession1 || character.profession2" class="space-y-1">
-        <p class="text-xs text-gray-500 dark:text-gray-400">🔨 Profissões</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">🔨 Professions</p>
         <div class="flex flex-wrap gap-2">
           <span 
             v-if="character.profession1"

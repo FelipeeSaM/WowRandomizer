@@ -9,7 +9,7 @@ import type {
   ProfessionsResponse,
 } from '@/types'
 
-// Configuração base do Axios
+// Base Axios configuration
 const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
   timeout: 10000,
@@ -18,7 +18,7 @@ const api: AxiosInstance = axios.create({
   },
 })
 
-// Interceptor para logging (desenvolvimento)
+// Interceptor for logging (development)
 api.interceptors.request.use(
   (config) => {
     console.log(`[API] ${config.method?.toUpperCase()} ${config.url}`)
@@ -30,7 +30,7 @@ api.interceptors.request.use(
   }
 )
 
-// Interceptor para tratamento de erros
+// Interceptor for error handling
 api.interceptors.response.use(
   (response) => {
     console.log(`[API] ✅ ${response.config.method?.toUpperCase()} ${response.config.url} - ${response.status}`)
@@ -50,7 +50,7 @@ api.interceptors.response.use(
 // Character API
 export const characterApi = {
   /**
-   * Gera um personagem completamente aleatório
+   * Generates a completely random character
    */
   generateRandom: async (): Promise<Character> => {
     const response = await api.post<Character>('/character/generate/random')
@@ -58,7 +58,7 @@ export const characterApi = {
   },
 
   /**
-   * Gera um personagem customizado (pode fixar facção, raça ou classe)
+   * Generates a custom character (can fix faction, race, or class)
    */
   generateCustom: async (params: GenerateCustomRequest): Promise<Character> => {
     const response = await api.post<Character>('/character/generate/custom', params)
@@ -66,7 +66,7 @@ export const characterApi = {
   },
 
   /**
-   * Lista todos os personagens gerados
+   * Lists all generated characters
    */
   getAll: async (): Promise<Character[]> => {
     const response = await api.get<CharactersListResponse>('/characters')
@@ -77,7 +77,7 @@ export const characterApi = {
 // Game Data API
 export const gameDataApi = {
   /**
-   * Lista todas as facções (Alliance, Horde)
+   * Lists all factions (Alliance, Horde)
    */
   getFactions: async (): Promise<FactionsResponse> => {
     const response = await api.get<FactionsResponse>('/factions')
@@ -85,7 +85,7 @@ export const gameDataApi = {
   },
 
   /**
-   * Lista todas as raças (pode filtrar por facção)
+   * Lists all races (can filter by faction)
    */
   getRaces: async (factionName?: string): Promise<RacesResponse> => {
     const response = await api.get<RacesResponse>('/races', {
@@ -95,7 +95,7 @@ export const gameDataApi = {
   },
 
   /**
-   * Lista todas as classes (pode filtrar por raça)
+   * Lists all classes (can filter by race)
    */
   getClasses: async (raceName?: string): Promise<ClassesResponse> => {
     const response = await api.get<ClassesResponse>('/classes', {
@@ -105,7 +105,7 @@ export const gameDataApi = {
   },
 
   /**
-   * Lista todas as profissões (primárias e secundárias)
+   * Lists all professions (primary and secondary)
    */
   getProfessions: async (): Promise<ProfessionsResponse> => {
     const response = await api.get<ProfessionsResponse>('/professions')
@@ -113,5 +113,5 @@ export const gameDataApi = {
   },
 }
 
-// Export da instância do Axios (caso necessário para uso customizado)
+// Export of the Axios instance (if needed for custom use)
 export default api

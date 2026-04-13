@@ -32,11 +32,11 @@ export const useCharacterStore = defineStore('character', () => {
     try {
       const character = await characterApi.generateRandom()
       currentCharacter.value = character
-      // Adiciona à lista local (opcional, depende se quer manter histórico)
+      // Adds to local list (optional, depends on whether history is kept)
       characters.value.unshift(character)
       return character
     } catch (err: any) {
-      error.value = err.response?.data?.message || err.message || 'Erro ao gerar personagem'
+      error.value = err.response?.data?.message || err.message || 'Error generating character'
       throw err
     } finally {
       loading.value = false
@@ -52,7 +52,7 @@ export const useCharacterStore = defineStore('character', () => {
       characters.value.unshift(character)
       return character
     } catch (err: any) {
-      error.value = err.response?.data?.message || err.message || 'Erro ao gerar personagem customizado'
+      error.value = err.response?.data?.message || err.message || 'Error generating custom character'
       throw err
     } finally {
       loading.value = false
@@ -66,7 +66,7 @@ export const useCharacterStore = defineStore('character', () => {
       const fetchedCharacters = await characterApi.getAll()
       characters.value = fetchedCharacters
     } catch (err: any) {
-      error.value = err.response?.data?.message || err.message || 'Erro ao buscar personagens'
+      error.value = err.response?.data?.message || err.message || 'Error fetching characters'
       throw err
     } finally {
       loading.value = false
