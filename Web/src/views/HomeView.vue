@@ -4,7 +4,7 @@ import { RouterLink } from 'vue-router'
 
 <template>
   <div class="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-red-900">
-    <div class="w-full px-8 py-16">
+    <div class="container mx-auto px-4 py-16">
       <div class="text-center space-y-8">
         <!-- Hero Section -->
         <div class="space-y-4">
@@ -34,7 +34,7 @@ import { RouterLink } from 'vue-router'
         </div>
 
         <!-- Features -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-4xl mx-auto">
           <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-white">
             <div class="text-4xl mb-2">🎲</div>
             <h3 class="text-lg font-bold mb-2">Fully Random</h3>

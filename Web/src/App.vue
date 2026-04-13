@@ -6,7 +6,7 @@ import { RouterLink, RouterView } from 'vue-router'
   <div class="app">
     <!-- Navigation -->
     <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50">
-      <div class="w-full px-4">
+      <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-16">
           <!-- Logo -->
           <RouterLink 
@@ -58,7 +58,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-gray-300 py-6 mt-16">
-      <div class="w-full px-4 text-center">
+      <div class="container mx-auto px-4 text-center">
         <p class="text-sm">
           ⚔️ WowRandomizer - Developed by 
           <a 
