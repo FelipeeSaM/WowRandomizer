@@ -15,6 +15,7 @@ const factionConfig = computed(() => {
       emoji: '🦁',
       color: 'text-blue-600 dark:text-blue-400',
       bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+      bgCardColor: 'bg-blue-100 dark:bg-blue-900/50',
       borderColor: 'border-blue-300 dark:border-blue-700',
     }
   } else {
@@ -22,6 +23,7 @@ const factionConfig = computed(() => {
       emoji: '🐺',
       color: 'text-red-600 dark:text-red-400',
       bgColor: 'bg-red-50 dark:bg-red-900/20',
+      bgCardColor: 'bg-red-100 dark:bg-red-900/50',
       borderColor: 'border-red-300 dark:border-red-700',
     }
   }
@@ -34,7 +36,7 @@ const formattedDate = computed(() => {
 </script>
 
 <template>
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+  <div :class="[factionConfig.bgCardColor, 'rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300']">
     <!-- Header -->
     <div 
       class="px-4 py-3 border-l-4"
