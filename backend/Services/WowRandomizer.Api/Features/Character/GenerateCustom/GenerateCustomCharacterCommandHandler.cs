@@ -35,12 +35,8 @@ public class GenerateCustomCharacterCommandHandler(AppDbContext db, IPublishEndp
         var className = ResolveClassName(request, race);
         var gender = GenerateRandomGender();
 
-        var primaryTask   = GenerateRandomProfessions(isPrimary: true, request.MainProfession, cancellationToken);
-        var secondaryTask = GenerateRandomProfessions(isPrimary: false, request.SubProfession, cancellationToken);
-        await Task.WhenAll(primaryTask, secondaryTask);
-
-        var pickedPrimary   = primaryTask.Result;
-        var pickedSecondary = secondaryTask.Result;
+        var pickedPrimary   = await GenerateRandomProfessions(isPrimary: true, request.MainProfession, cancellationToken);
+        var pickedSecondary = await GenerateRandomProfessions(isPrimary: false, request.SubProfession, cancellationToken);
 
         var result = new GenerateCharacterResult(
             Guid.NewGuid(),
@@ -119,7 +115,8 @@ public class GenerateCustomCharacterCommandHandler(AppDbContext db, IPublishEndp
             professionsReturn.Add(professions.Where(p => p.Id != professionsList[0].Id).OrderBy(_ => Random.Shared.Next()).FirstOrDefault()!);
         } else
         {
-            professionsReturn.AddRange(professions.OrderBy(_ => Random.Shared.Next()).Take(2));
+            var count = Random.Shared.Next(0, 3);
+            professionsReturn.AddRange(professions.OrderBy(_ => Random.Shared.Next()).Take(count));
         }
 
         return professionsReturn;
