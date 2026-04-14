@@ -18,8 +18,6 @@ public class GenerateCustomCharacterCommandValidator : AbstractValidator<Generat
     public GenerateCustomCharacterCommandValidator()
     {
         RuleFor(x => x.FactionName).NotEmpty().WithMessage("FactionName cannot be empty.");
-        RuleFor(x => x.RaceName).NotEmpty().WithMessage("RaceName cannot be empty.");
-        RuleFor(x => x.ClassName).NotEmpty().WithMessage("ClassName cannot be empty.");
     }
 }
 
@@ -112,11 +110,11 @@ public class GenerateCustomCharacterCommandHandler(AppDbContext db, IPublishEndp
         if(professionsList.Count == 1)
         {
             professionsReturn.Add(professionsList[0]);
-            professionsReturn.Add(professions.Where(p => p.Id != professionsList[0].Id).OrderBy(_ => Random.Shared.Next()).FirstOrDefault()!);
+            professionsReturn.Add(professions.Where(p => p.Id != professionsList[0].Id).OrderBy(_ => Random.Shared.Next()).Distinct().FirstOrDefault()!);
         } else
         {
             var count = Random.Shared.Next(0, 3);
-            professionsReturn.AddRange(professions.OrderBy(_ => Random.Shared.Next()).Take(count));
+            professionsReturn.AddRange(professions.OrderBy(_ => Random.Shared.Next()).Take(count).Distinct());
         }
 
         return professionsReturn;
