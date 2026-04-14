@@ -12,10 +12,10 @@ const characterStore = useCharacterStore()
       <!-- Header -->
       <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-          🎲 Gerador de Personagens
+          🎲 Character Generator
         </h1>
         <p class="text-gray-600 dark:text-gray-400">
-          Clique no botão abaixo para gerar um novo personagem aleatório
+          Click the button below to generate a new random character
         </p>
       </div>
 
@@ -36,10 +36,10 @@ const characterStore = useCharacterStore()
       >
         <div class="text-6xl mb-4">🎭</div>
         <p class="text-gray-600 dark:text-gray-400 text-lg">
-          Nenhum personagem gerado ainda
+          No character generated yet
         </p>
         <p class="text-gray-500 dark:text-gray-500 text-sm mt-2">
-          Clique no botão acima para começar
+          Click the button above to get started
         </p>
       </div>
     </div>

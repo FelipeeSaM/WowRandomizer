@@ -14,7 +14,7 @@ export const useGameDataStore = defineStore('gameData', () => {
 
   // Actions
   async function fetchFactions() {
-    if (factions.value.length > 0) return // Cache simples
+    if (factions.value.length > 0) return // Simple cache
     
     loading.value = true
     error.value = null
@@ -22,7 +22,7 @@ export const useGameDataStore = defineStore('gameData', () => {
       const response = await gameDataApi.getFactions()
       factions.value = response.factions
     } catch (err: any) {
-      error.value = err.response?.data?.message || err.message || 'Erro ao buscar facções'
+      error.value = err.response?.data?.message || err.message || 'Error fetching factions'
       throw err
     } finally {
       loading.value = false
@@ -36,7 +36,7 @@ export const useGameDataStore = defineStore('gameData', () => {
       const response = await gameDataApi.getRaces(factionName)
       races.value = response.races
     } catch (err: any) {
-      error.value = err.response?.data?.message || err.message || 'Erro ao buscar raças'
+      error.value = err.response?.data?.message || err.message || 'Error fetching races'
       throw err
     } finally {
       loading.value = false
@@ -50,7 +50,7 @@ export const useGameDataStore = defineStore('gameData', () => {
       const response = await gameDataApi.getClasses(raceName)
       classes.value = response.classes
     } catch (err: any) {
-      error.value = err.response?.data?.message || err.message || 'Erro ao buscar classes'
+      error.value = err.response?.data?.message || err.message || 'Error fetching classes'
       throw err
     } finally {
       loading.value = false
@@ -58,7 +58,7 @@ export const useGameDataStore = defineStore('gameData', () => {
   }
 
   async function fetchProfessions() {
-    if (professions.value.length > 0) return // Cache simples
+    if (professions.value.length > 0) return // Simple cache
     
     loading.value = true
     error.value = null
@@ -66,7 +66,7 @@ export const useGameDataStore = defineStore('gameData', () => {
       const response = await gameDataApi.getProfessions()
       professions.value = response.professions
     } catch (err: any) {
-      error.value = err.response?.data?.message || err.message || 'Erro ao buscar profissões'
+      error.value = err.response?.data?.message || err.message || 'Error fetching professions'
       throw err
     } finally {
       loading.value = false

@@ -15,7 +15,7 @@ export interface Character {
 
 // API Request/Response Types
 export interface GenerateRandomRequest {
-  // Sem parâmetros - geração totalmente aleatória
+  // No parameters - fully random generation
 }
 
 export interface GenerateCustomRequest {

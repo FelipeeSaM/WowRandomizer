@@ -7,7 +7,7 @@ const props = defineProps<{
   character: Character
 }>()
 
-// Configuração por facção
+// Faction configuration
 const factionConfig = computed(() => {
   const faction = props.character.faction.toLowerCase()
   if (faction.includes('alliance')) {
@@ -15,6 +15,7 @@ const factionConfig = computed(() => {
       emoji: '🦁',
       color: 'text-blue-600 dark:text-blue-400',
       bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+      bgCardColor: 'bg-blue-100 dark:bg-blue-900/50',
       borderColor: 'border-blue-300 dark:border-blue-700',
     }
   } else {
@@ -22,6 +23,7 @@ const factionConfig = computed(() => {
       emoji: '🐺',
       color: 'text-red-600 dark:text-red-400',
       bgColor: 'bg-red-50 dark:bg-red-900/20',
+      bgCardColor: 'bg-red-100 dark:bg-red-900/50',
       borderColor: 'border-red-300 dark:border-red-700',
     }
   }
@@ -29,12 +31,12 @@ const factionConfig = computed(() => {
 
 const formattedDate = computed(() => {
   const date = new Date(props.character.generatedAt)
-  return date.toLocaleDateString('pt-BR', { dateStyle: 'short' })
+  return date.toLocaleDateString('en-US', { dateStyle: 'short' })
 })
 </script>
 
 <template>
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+  <div :class="[factionConfig.bgCardColor, 'rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300']">
     <!-- Header -->
     <div 
       class="px-4 py-3 border-l-4"
@@ -53,27 +55,27 @@ const formattedDate = computed(() => {
       <!-- Race & Class -->
       <div class="flex justify-between items-center">
         <div>
-          <p class="text-xs text-gray-500 dark:text-gray-400">Raça</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Race</p>
           <p class="font-semibold text-gray-900 dark:text-white">{{ character.race }} {{ getRaceEmoji(character.race) }}</p>
         </div>
         <div class="text-right">
-          <p class="text-xs text-gray-500 dark:text-gray-400">Classe</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Class</p>
           <p class="font-semibold text-gray-900 dark:text-white">{{ character.class }} {{ getClassEmoji(character.class) }}</p>
         </div>
       </div>
 
       <!-- Gender -->
       <div>
-        <p class="text-xs text-gray-500 dark:text-gray-400">Gênero</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Gender</p>
         <p class="text-sm text-gray-700 dark:text-gray-300">
-          {{ character.gender === 'Male' ? '♂️ Masculino' : '♀️ Feminino' }}
+          {{ character.gender === 'Male' ? '♂️ Male' : '♀️ Female' }}
         </p>
       </div>
 
       <!-- Professions -->
       <div v-if="character.profession1 || character.profession2" class="space-y-1">
-        <p class="text-xs text-gray-500 dark:text-gray-400">🔨 Profissões</p>
-        <div class="flex flex-wrap gap-2">
+        <p class="text-xs text-gray-500 dark:text-gray-400">🔨 Professions</p>
+        <div class="flex flex-wrap gap-2 justify-center items-center">
           <span 
             v-if="character.profession1"
             class="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs rounded-full"
@@ -85,6 +87,25 @@ const formattedDate = computed(() => {
             class="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs rounded-full"
           >
             {{ character.profession2 }} {{ getProfessionEmoji(character.profession2) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Sub-professions -->
+      <div v-if="character.subProfession1 || character.subProfession2" class="space-y-1">
+        <p class="text-xs text-gray-500 dark:text-gray-400">🔨 Sub-Professions</p>
+        <div class="flex flex-wrap gap-2 justify-center items-center">
+          <span 
+            v-if="character.subProfession1"
+            class="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs rounded-full"
+          >
+            {{ character.subProfession1 }} {{ getProfessionEmoji(character.subProfession1) }}
+          </span>
+          <span 
+            v-if="character.subProfession2"
+            class="px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 text-xs rounded-full"
+          >
+            {{ character.subProfession2 }} {{ getProfessionEmoji(character.subProfession2) }}
           </span>
         </div>
       </div>

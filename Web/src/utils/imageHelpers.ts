@@ -1,7 +1,7 @@
 /**
- * Retorna emoji da raça
- * @param raceName - Nome da raça
- * @returns Emoji correspondente
+ * Returns the race emoji
+ * @param raceName - Race name
+ * @returns Corresponding emoji
  */
 export function getRaceEmoji(raceName: string): string {
   const normalized = raceName.toLowerCase()
@@ -31,18 +31,18 @@ export function getRaceEmoji(raceName: string): string {
     'vulpera': '🦊',
     'dracthyr': '🐲',
   }
-  // Normaliza nomes compostos para facilitar o match
+  // Normalizes compound names to facilitate matching
   const key = Object.keys(raceEmojis).find(k => normalized === k || normalized.replace(/[- ]/g, '') === k.replace(/[- ]/g, ''))
   return key ? raceEmojis[key] : '🎭'
 }
 /**
- * Helper functions para obter URLs de imagens de facções e classes
+ * Helper functions to get faction and class image URLs
  */
 
 /**
- * Retorna a URL do ícone da facção
- * @param faction - Nome da facção (ex: "Alliance", "Horde")
- * @returns URL do ícone SVG
+ * Returns the faction icon URL
+ * @param faction - Faction name (e.g., "Alliance", "Horde")
+ * @returns SVG icon URL
  */
 export function getFactionIcon(faction: string): string {
   const normalized = faction.toLowerCase().replace(/\s+/g, '-')
@@ -50,9 +50,9 @@ export function getFactionIcon(faction: string): string {
 }
 
 /**
- * Retorna a URL do ícone da profissão
- * @param professionName - Nome da profissão (ex: "Mining", "Blacksmithing")
- * @returns URL do ícone PNG/SVG
+ * Returns the profession icon URL
+ * @param professionName - Profession name (e.g., "Mining", "Blacksmithing")
+ * @returns PNG/SVG icon URL
  */
 export function getProfessionIcon(professionName: string): string {
   const normalized = professionName.toLowerCase().replace(/\s+/g, '-')
@@ -60,9 +60,9 @@ export function getProfessionIcon(professionName: string): string {
 }
 
 /**
- * Retorna a URL do ícone da classe
- * @param className - Nome da classe (ex: "Warrior", "Death Knight")
- * @returns URL do ícone SVG
+ * Returns the class icon URL
+ * @param className - Class name (e.g., "Warrior", "Death Knight")
+ * @returns SVG icon URL
  */
 export function getClassIcon(className: string): string {
   const normalized = className.toLowerCase().replace(/\s+/g, '-')
@@ -70,9 +70,9 @@ export function getClassIcon(className: string): string {
 }
 
 /**
- * Retorna fallback de emoji caso a imagem não carregue
- * @param faction - Nome da facção
- * @returns Emoji correspondente
+ * Returns emoji fallback in case the image fails to load
+ * @param faction - Faction name
+ * @returns Corresponding emoji
  */
 export function getFactionEmoji(faction: string): string {
   const normalized = faction.toLowerCase()
@@ -82,9 +82,9 @@ export function getFactionEmoji(faction: string): string {
 }
 
 /**
- * Retorna emoji da classe
- * @param className - Nome da classe
- * @returns Emoji correspondente
+ * Returns the class emoji
+ * @param className - Class name
+ * @returns Corresponding emoji
  */
 export function getClassEmoji(className: string): string {
   const normalized = className.toLowerCase()
@@ -106,9 +106,9 @@ export function getClassEmoji(className: string): string {
 }
 
 /**
- * Retorna emoji da profissão
- * @param professionName - Nome da profissão
- * @returns Emoji correspondente
+ * Returns the profession emoji
+ * @param professionName - Profession name
+ * @returns Corresponding emoji
  */
 export function getProfessionEmoji(professionName: string): string {
   const normalized = professionName.toLowerCase()

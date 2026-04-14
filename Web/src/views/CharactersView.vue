@@ -9,7 +9,7 @@ onMounted(async () => {
   try {
     await characterStore.fetchAll()
   } catch (error) {
-    console.error('Erro ao carregar personagens:', error)
+    console.error('Error loading characters:', error)
   }
 })
 </script>
@@ -20,17 +20,17 @@ onMounted(async () => {
       <!-- Header -->
       <div class="mb-8">
         <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-          📜 Personagens Gerados
+          📜 Generated Characters
         </h1>
         <p class="text-gray-600 dark:text-gray-400">
-          Total: {{ characterStore.totalCharacters }} personagens
+          Total: {{ characterStore.totalCharacters }} characters
         </p>
       </div>
 
       <!-- Loading -->
       <div v-if="characterStore.loading" class="text-center py-16">
         <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto"></div>
-        <p class="text-gray-600 dark:text-gray-400 mt-4">Carregando personagens...</p>
+        <p class="text-gray-600 dark:text-gray-400 mt-4">Loading characters...</p>
       </div>
 
       <!-- Error -->
@@ -45,10 +45,10 @@ onMounted(async () => {
       >
         <div class="text-6xl mb-4">📭</div>
         <p class="text-gray-600 dark:text-gray-400 text-lg">
-          Nenhum personagem encontrado
+          No characters found
         </p>
         <p class="text-gray-500 dark:text-gray-500 text-sm mt-2">
-          Gere seu primeiro personagem!
+          Generate your first character!
         </p>
       </div>
 
