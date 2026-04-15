@@ -23,31 +23,33 @@ services:
   randomizerdb:
     container_name: wowrandomizer-sqlserver
     image: mcr.microsoft.com/mssql/server:2022-latest
+    security_opt:
+      - label=disable
     ports:
       - "1433:1433"
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "Strong!Pass1"
     volumes:
-      - randomizerdb-data:/var/opt/mssql
+      - randomizerdb-data:/var/opt/mssql:Z
     restart: always
 
   wowrandomizer.api:
-    image: ${DOCKER_REGISTRY-}wowrandomizerapi
+    container_name: wowrandomizer
     pull_policy: build
     build:
       context: ./backend
       dockerfile: Services/WowRandomizer.Api/Dockerfile
 
   wowrandomizer.character.api:
-    image: ${DOCKER_REGISTRY-}wowrandomizercharacterapi
+    container_name: wowrandomizer-character
     pull_policy: build
     build:
       context: ./backend
       dockerfile: Services/WowRandomizer.Character.Api/Dockerfile
 
   yarpgateway:
-    image: ${DOCKER_REGISTRY-}yarpgateway
+    container_name: yarp
     pull_policy: build
     build:
       context: ./backend
@@ -55,9 +57,8 @@ services:
 
   web:
     container_name: wowrandomizer-web
-    image: ${DOCKER_REGISTRY-}wowrandomizerweb
     build:
-      context: ./web
+      context: ./Web
       dockerfile: Dockerfile
     ports:
       - "3000:80"
