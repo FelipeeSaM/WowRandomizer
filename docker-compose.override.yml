@@ -26,7 +26,7 @@ services:
     ports:
       - "1433:1433"
     volumes:
-      - randomizerdb-data:/var/opt/mssql
+      - randomizerdb-data:/var/opt/mssql:Z
     healthcheck:
       test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Strong!Pass1' -Q 'SELECT 1' -b -C 2>/dev/null || /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Strong!Pass1' -Q 'SELECT 1' -b 2>/dev/null"]
       interval: 15s
@@ -57,7 +57,7 @@ services:
     ports:
       - "6000:8080"
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${HOME}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
 
   wowrandomizer.character.api:
     container_name: wowrandomizer.character.api
@@ -82,7 +82,7 @@ services:
     ports:
       - "6001:8080"
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${HOME}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
 
   yarpgateway:
     container_name: yarpgateway
@@ -95,7 +95,7 @@ services:
     ports:
       - "6002:8080"
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${HOME}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
 
   elasticsearch:
     container_name: elasticsearch
