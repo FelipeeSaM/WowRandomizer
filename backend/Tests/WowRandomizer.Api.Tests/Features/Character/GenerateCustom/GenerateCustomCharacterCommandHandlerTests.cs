@@ -33,8 +33,6 @@ public class GenerateCustomCharacterCommandHandlerTests
     [TearDown]
     public void TearDown() => _db.Dispose();
 
-    // ─── Testes de filtragem por Faction / Race / Class ────────────────────────
-
     [Test]
     public async Task Handle_WithSpecificFaction_ResultHasThatFaction()
     {
@@ -80,8 +78,6 @@ public class GenerateCustomCharacterCommandHandlerTests
         });
     }
 
-    // ─── Testes de combinação inválida ─────────────────────────────────────────
-
     [Test]
     public void Handle_WithIncompatibleFactionAndRace_ThrowsArgumentException()
     {
@@ -101,8 +97,6 @@ public class GenerateCustomCharacterCommandHandlerTests
         Assert.ThrowsAsync<ArgumentException>(
             () => _handler.Handle(command, CancellationToken.None));
     }
-
-    // ─── Testes de resultado genérico ──────────────────────────────────────────
 
     [Test]
     public async Task Handle_WithNoConstraints_ReturnsValidCharacter()
@@ -133,8 +127,6 @@ public class GenerateCustomCharacterCommandHandlerTests
         Assert.That(result1.Id, Is.Not.EqualTo(result2.Id));
     }
 
-    // ─── Testes de publicação de evento ────────────────────────────────────────
-
     [Test]
     public async Task Handle_Always_PublishesCharacterGeneratedEvent()
     {
@@ -162,8 +154,6 @@ public class GenerateCustomCharacterCommandHandlerTests
                 e.Gender == result.Gender),
             Arg.Any<CancellationToken>());
     }
-
-    // ─── Testes de profissões primárias ────────────────────────────────────────
 
     [Test]
     public async Task Handle_WithTwoPrimaryProfessions_ReturnsBothInResult()
@@ -195,7 +185,6 @@ public class GenerateCustomCharacterCommandHandlerTests
 
         var result = await _handler.Handle(command, CancellationToken.None);
 
-        // A profissão fornecida deve aparecer; a segunda é preenchida aleatoriamente
         Assert.Multiple(() =>
         {
             Assert.That(result.Profession1, Is.EqualTo("Mining"));
@@ -214,8 +203,6 @@ public class GenerateCustomCharacterCommandHandlerTests
         var profCount = new[] { result.Profession1, result.Profession2 }.Count(p => p is not null);
         Assert.That(profCount, Is.InRange(0, 2));
     }
-
-    // ─── Testes de profissões secundárias (sub-profissões) ─────────────────────
 
     [Test]
     public async Task Handle_WithTwoSubProfessions_ReturnsBothInResult()
@@ -236,8 +223,6 @@ public class GenerateCustomCharacterCommandHandlerTests
         });
     }
 
-    // ─── Helpers ───────────────────────────────────────────────────────────────
-
     private void SeedDatabase()
     {
         var alliance = new Faction { Id = 1, Name = "Alliance" };
@@ -256,15 +241,15 @@ public class GenerateCustomCharacterCommandHandlerTests
         _db.Classes.AddRange(warrior, mage, hunter);
 
         _db.FactionRaces.AddRange(
-            new FactionRace { FactionId = 1, RaceId = 1 },   // Alliance ↔ Human
-            new FactionRace { FactionId = 1, RaceId = 3 },   // Alliance ↔ Night Elf
-            new FactionRace { FactionId = 2, RaceId = 2 });  // Horde ↔ Orc
+            new FactionRace { FactionId = 1, RaceId = 1 },
+            new FactionRace { FactionId = 1, RaceId = 3 },
+            new FactionRace { FactionId = 2, RaceId = 2 });
 
         _db.RaceClasses.AddRange(
-            new RaceClass { RaceId = 1, ClassId = 1 },   // Human → Warrior
-            new RaceClass { RaceId = 1, ClassId = 2 },   // Human → Mage
-            new RaceClass { RaceId = 2, ClassId = 1 },   // Orc → Warrior
-            new RaceClass { RaceId = 3, ClassId = 3 });  // Night Elf → Hunter
+            new RaceClass { RaceId = 1, ClassId = 1 },
+            new RaceClass { RaceId = 1, ClassId = 2 },
+            new RaceClass { RaceId = 2, ClassId = 1 },
+            new RaceClass { RaceId = 3, ClassId = 3 });
 
         _db.Professions.AddRange(
             new Profession { Id = 1, Name = "Mining",         IsPrimary = true  },
