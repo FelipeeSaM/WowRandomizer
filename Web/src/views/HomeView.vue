@@ -3,7 +3,7 @@ import { RouterLink } from 'vue-router'
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-red-900">
+  <div class="h-full bg-gradient-to-br from-blue-900 via-purple-900 to-red-900 flex items-center justify-center">
     <div class="container mx-auto px-4 py-16">
       <div class="text-center space-y-8">
         <!-- Hero Section -->

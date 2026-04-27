@@ -57,7 +57,7 @@ import { RouterLink, RouterView } from 'vue-router'
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-gray-300 py-6 mt-16">
+    <footer class="bg-gray-800 text-gray-300 py-6">
       <div class="container mx-auto px-4 text-center">
         <p class="text-sm">
           ⚔️ WowRandomizer - Developed by 
@@ -76,12 +76,14 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 .app {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
 main {
   flex: 1;
+  overflow-y: auto;
 }
 </style>
