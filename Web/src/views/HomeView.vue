@@ -7,7 +7,7 @@ import { RouterLink } from 'vue-router'
     <div class="container mx-auto px-4 py-16">
       <div class="text-center space-y-8">
         <!-- Hero Section -->
-        <div class="space-y-4">
+        <div class="space-y-4 flex flex-col justify-center items-center">
           <h1 class="text-6xl font-bold text-white drop-shadow-lg">
             ⚔️ WowRandomizer
           </h1>
